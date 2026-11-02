@@ -222,3 +222,27 @@ def test_audit_chain_and_signature(tmp_path):
     forged.append("a", "t", "allow", "p", "r", "x")
     assert not verify_entries(forged.entries, key.public_key())[0]
     assert not verify_entries(log.entries[:-1], expected_head=log.entries[-1]["hash"])[0]
+
+
+def test_url_edge_cases_and_extended_ipv6_forms():
+    from toolpin.constraints import check_url
+    for bad in ["http://[::127.0.0.1]/", "http://[::a00:5]/", "http://[64:ff9b::a00:5]/", "http://[2002:a00:5::]/",
+                "http://[::]/", "http://0/", "http://LOCALHOST/", "http://a.localhost/", "http://127.0.0.1.nip.io/",
+                "http://localtest.me/", "http://010.000.000.001/", "http://1.2.3/", "http://%31%32%37.0.0.1/",
+                "http://example.com\u0000.evil/", "http:///x", "http://exa mple.com/", "http://xn--/", "ftp://example.com/"]:
+        assert check_url(bad), bad
+    for ok in ["https://example.com/", "https://münchen.example/x", "http://8.8.8.8/", "https://[2606:4700:4700::1111]/"]:
+        assert check_url(ok) is None, ok
+    assert check_url("https://good.example.com/x", ["example.com"]) is None
+    assert check_url("https://good.example.org/x", ["example.com"]) == "host not in allow-list"
+    assert check_url("http://rebind.test/", resolver=lambda h: ["10.0.0.1"])
+    assert check_url("http://ok.test/", resolver=lambda h: ["8.8.4.4"]) is None
+
+
+def test_path_edge_cases():
+    from toolpin.constraints import check_path
+    for bad in ["~/secret", "$HOME/x", "`id`/x", "a\\b", "..;/etc", "/data/..%00/x", "%c0%ae%c0%ae/x", "   ", "//server/share/x",
+                "a/..../b", "a/%252e%252e/b", "../x", "x/../../y", "/dataevil/x", "file:///etc/passwd"]:
+        assert check_path(bad, ["/data"]), bad
+    for ok in ["reports/q3.csv", "/data/x/y.txt", "a b/c (1).txt", "v1..v2.diff", "100%25.txt", "ünï/名前.txt"]:
+        assert check_path(ok, ["/data"]) is None, ok

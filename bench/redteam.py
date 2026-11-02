@@ -2,7 +2,6 @@
   python bench/redteam.py --json > before.json     (run on the pre-hardening commit for the baseline)
 Deterministic. Evasion rate = of seed attacks the control BLOCKS in plain form, the fraction a mutation gets past."""
 import json
-import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -57,6 +56,13 @@ def mutants(control, seed):
             "shadow": redteam.name_mutants}[control](seed)
 
 
+def mutants_r2(control, seed):
+    if control == "scan":
+        return redteam.round2_text(seed)
+    return {"url": redteam.round2_url, "path": redteam.round2_path, "args": redteam.round2_args,
+            "shadow": redteam.round2_names}[control](seed)
+
+
 def run():
     res = {}
     for control, ss in seeds().items():
@@ -74,6 +80,21 @@ def run():
                         "evaded": ev, "evasion_rate": round(ev / tot, 3) if tot else None,
                         "by_operator": {k: {"evaded": v[0], "total": v[1], "rate": round(v[0] / v[1], 3)}
                                         for k, v in sorted(per_op.items())}}
+    r2 = {}
+    for control, ss in seeds().items():
+        base = [s for s in ss if blocked(control, s)]
+        per_op = defaultdict(lambda: [0, 0])
+        for s in base:
+            for m in mutants_r2(control, s):
+                if m.value == s:
+                    continue
+                per_op[m.operator][1] += 1
+                per_op[m.operator][0] += not blocked(control, m.value)
+        tot = sum(v[1] for v in per_op.values())
+        ev = sum(v[0] for v in per_op.values())
+        r2[control] = {"mutants": tot, "evaded": ev, "evasion_rate": round(ev / tot, 3) if tot else None,
+                       "by_operator": {k: {"evaded": v[0], "total": v[1]} for k, v in sorted(per_op.items()) if v[0]}}
+    res["round2_unseen_operators"] = r2
     held = corpus.run(corpus.load_cases(ROOT / "corpus", "test"))
     conf = corpus.confusion(held)
     res["heldout"] = {c: {k: m[k] for k in ("TP", "FN", "FP", "TN", "precision", "recall")} for c, m in sorted(conf.items())}

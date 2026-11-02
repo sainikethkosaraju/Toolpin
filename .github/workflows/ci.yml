@@ -1,15 +1,19 @@
 name: ci
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix: { python: ["3.11", "3.12", "3.13"] }
+    strategy: { matrix: { python: ["3.11", "3.12", "3.13"] } }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "${{ matrix.python }}" }
-      - run: pip install -e .[dev]
-      - run: ruff check .
-      - run: pyright
-      - run: pytest
+      - run: pip install -e ".[dev]" "ontolite @ git+https://github.com/sainikethkosaraju/ontolite@claude/kind-mayer-jdgp6q"
+      - run: ruff check . && pyright
+      - run: pytest -q --cov=toolpin --cov-report=term
+      - name: Generated evidence is current
+        run: |
+          toolpin corpus --out /tmp/R.md && diff /tmp/R.md corpus/RESULTS.md
+          python bench/redteam_report.py && python bench/stack_bench.py --md >/dev/null && git diff --exit-code docs/
+      - name: Held-out corpus is frozen
+        run: sha256sum -c corpus/test/FROZEN.sha256

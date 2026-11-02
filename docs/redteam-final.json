@@ -1,0 +1,458 @@
+{
+ "args": {
+  "by_operator": {
+   "case_mix": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 14
+   },
+   "comment_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "double_url_encoded": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "fullwidth": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "ifs_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "newline_instead_of_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "split_keyword": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 3
+   },
+   "tab_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "url_encoded": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   }
+  },
+  "evaded": 0,
+  "evasion_rate": 0.0,
+  "mutants": 110,
+  "seeds_blocked_plain": 15,
+  "seeds_total": 16
+ },
+ "heldout": {
+  "args": {
+   "FN": 0,
+   "FP": 0,
+   "TN": 8,
+   "TP": 14,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "path": {
+   "FN": 0,
+   "FP": 0,
+   "TN": 6,
+   "TP": 12,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "scan": {
+   "FN": 3,
+   "FP": 1,
+   "TN": 9,
+   "TP": 17,
+   "precision": 0.9444444444444444,
+   "recall": 0.85
+  },
+  "shadow": {
+   "FN": 0,
+   "FP": 0,
+   "TN": 4,
+   "TP": 8,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "url": {
+   "FN": 3,
+   "FP": 0,
+   "TN": 6,
+   "TP": 17,
+   "precision": 1.0,
+   "recall": 0.85
+  }
+ },
+ "path": {
+  "by_operator": {
+   "backslash": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "dot_segments": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 5
+   },
+   "double_encoded": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "file_scheme": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "fullwidth_dots": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 8
+   },
+   "mixed_slashes": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "null_mid": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "overlong_slash": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "percent_backslash": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "percent_encoded": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "repeated_dots": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 5
+   },
+   "trailing_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   }
+  },
+  "evaded": 0,
+  "evasion_rate": 0.0,
+  "mutants": 114,
+  "seeds_blocked_plain": 12,
+  "seeds_total": 12
+ },
+ "round2_unseen_operators": {
+  "args": {
+   "by_operator": {
+    "hash_comment": {
+     "evaded": 1,
+     "total": 2
+    }
+   },
+   "evaded": 1,
+   "evasion_rate": 0.018,
+   "mutants": 57
+  },
+  "path": {
+   "by_operator": {
+    "leading_dot_slash": {
+     "evaded": 3,
+     "total": 12
+    },
+    "unicode_fraction_slash": {
+     "evaded": 9,
+     "total": 10
+    }
+   },
+   "evaded": 12,
+   "evasion_rate": 0.115,
+   "mutants": 104
+  },
+  "scan": {
+   "by_operator": {
+    "dot_separated": {
+     "evaded": 1,
+     "total": 15
+    },
+    "html_entities": {
+     "evaded": 1,
+     "total": 15
+    },
+    "json_unicode_escape": {
+     "evaded": 1,
+     "total": 15
+    }
+   },
+   "evaded": 3,
+   "evasion_rate": 0.023,
+   "mutants": 132
+  },
+  "shadow": {
+   "by_operator": {
+    "combining": {
+     "evaded": 1,
+     "total": 1
+    }
+   },
+   "evaded": 1,
+   "evasion_rate": 0.143,
+   "mutants": 7
+  },
+  "url": {
+   "by_operator": {},
+   "evaded": 0,
+   "evasion_rate": 0.0,
+   "mutants": 284
+  }
+ },
+ "scan": {
+  "by_operator": {
+   "base64": {
+    "evaded": 3,
+    "rate": 0.2,
+    "total": 15
+   },
+   "code_fence": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "fullwidth": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "homoglyph": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 14
+   },
+   "html_comment": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "leetspeak": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "mixed_case": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "nbsp": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "padding": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "rot13": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "soft_hyphen": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   },
+   "spaced": {
+    "evaded": 1,
+    "rate": 0.067,
+    "total": 15
+   },
+   "tabs": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "translate": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 3
+   },
+   "zero_width": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 15
+   }
+  },
+  "evaded": 4,
+  "evasion_rate": 0.019,
+  "mutants": 208,
+  "seeds_blocked_plain": 15,
+  "seeds_total": 20
+ },
+ "shadow": {
+  "by_operator": {
+   "camel": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "digit_lookalike": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "dot_sep": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "fullwidth": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "homoglyph": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "soft_hyphen": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "space_sep": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "upper": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   }
+  },
+  "evaded": 0,
+  "evasion_rate": 0.0,
+  "mutants": 8,
+  "seeds_blocked_plain": 1,
+  "seeds_total": 1
+ },
+ "url": {
+  "by_operator": {
+   "backslash_authority": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 23
+   },
+   "ip_decimal": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_fullwidth": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_hex": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_ideographic_dots": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_ipv4_mapped": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_ipv4_mapped_hex": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_leading_zeros": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "ip_mixed_radix": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_octal": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_octal_octets": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_pct_encoded": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_trailing_dot": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "tab_in_url": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 23
+   },
+   "trailing_dot_host": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 23
+   },
+   "upper_scheme": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 23
+   },
+   "userinfo_prefix": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 23
+   }
+  },
+  "evaded": 0,
+  "evasion_rate": 0.0,
+  "mutants": 257,
+  "seeds_blocked_plain": 23,
+  "seeds_total": 25
+ }
+}

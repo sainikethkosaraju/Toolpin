@@ -16,8 +16,8 @@ single call looks fine. IFC adds session memory:
 
 LIMITS (stated plainly): rule 2 does not see paraphrase, summarisation, translation or any lossy
 re-expression, nor covert channels (timing, argument ordering). That is exactly why rule 1 exists.
-Atoms must look like identifiers (digits, @, long, mixed) to keep false positives down, so plain
-prose is only caught through 5-word shingles."""
+Atoms must look like identifiers (digits, @, long, mixed) or be figures with >= 5 significant digits (so
+48215.0 matches 48,215), to keep false positives down; plain prose is only caught through 5-word shingles."""
 
 from __future__ import annotations
 
@@ -38,6 +38,8 @@ WORD = re.compile(r"[A-Za-z0-9']+")
 B64 = re.compile(r"(?:[A-Za-z0-9+/]{16,}={0,2})|(?:[A-Za-z0-9_-]{16,})")
 HEX = re.compile(r"(?:[0-9a-fA-F]{2}){8,}")
 SHINGLE = 5
+NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+MIN_SIGNIFICANT_DIGITS = 5
 
 
 @dataclass(frozen=True)
@@ -152,6 +154,11 @@ class IFC:
                 for piece in _pieces(tok):
                     if len(piece) >= 8 and _identifier_like(piece):
                         out.add("a:" + self._fp(piece))
+            for num in NUMBER.findall(variant):                      # figures: 48215.0 == 48,215 == 48215.00
+                canon = num.replace(",", "")
+                canon = canon.rstrip("0").rstrip(".") if "." in canon else canon
+                if len(canon.replace(".", "").lstrip("0")) >= MIN_SIGNIFICANT_DIGITS:
+                    out.add("n:" + self._fp(canon))
             words = [w.lower() for w in WORD.findall(variant)]
             for i in range(len(words) - SHINGLE + 1):
                 out.add("s:" + self._fp(" ".join(words[i:i + SHINGLE])))

@@ -7,77 +7,45 @@
 | control | TP | FN (missed attacks) | FP (benign blocked) | TN | precision | recall |
 | --- | --- | --- | --- | --- | --- | --- |
 | approval | 12 | 0 | 0 | 3 | 1.00 | 1.00 |
-| args | 14 | 4 | 2 | 5 | 0.88 | 0.78 |
+| args | 17 | 1 | 2 | 5 | 0.89 | 0.94 |
 | handle | 8 | 0 | 0 | 2 | 1.00 | 1.00 |
 | identity | 12 | 0 | 0 | 4 | 1.00 | 1.00 |
 | lockfile | 13 | 0 | 0 | 4 | 1.00 | 1.00 |
 | path | 10 | 0 | 0 | 4 | 1.00 | 1.00 |
 | policy | 7 | 3 | 0 | 4 | 1.00 | 0.70 |
-| scan | 13 | 5 | 3 | 7 | 0.81 | 0.72 |
+| scan | 15 | 3 | 3 | 7 | 0.83 | 0.83 |
 | shadow | 7 | 2 | 0 | 3 | 1.00 | 0.78 |
-| url | 18 | 4 | 0 | 5 | 1.00 | 0.82 |
+| url | 20 | 2 | 0 | 5 | 1.00 | 0.91 |
 
 ## Split: `test` (108 cases) - held out, frozen by hash before hardening
 
 | control | TP | FN (missed attacks) | FP (benign blocked) | TN | precision | recall |
 | --- | --- | --- | --- | --- | --- | --- |
-| args | 11 | 3 | 0 | 8 | 1.00 | 0.79 |
-| path | 6 | 6 | 0 | 6 | 1.00 | 0.50 |
-| scan | 8 | 12 | 1 | 9 | 0.89 | 0.40 |
-| shadow | 6 | 2 | 0 | 4 | 1.00 | 0.75 |
-| url | 12 | 8 | 0 | 6 | 1.00 | 0.60 |
+| args | 14 | 0 | 0 | 8 | 1.00 | 1.00 |
+| path | 12 | 0 | 0 | 6 | 1.00 | 1.00 |
+| scan | 17 | 3 | 1 | 9 | 0.94 | 0.85 |
+| shadow | 8 | 0 | 0 | 4 | 1.00 | 1.00 |
+| url | 17 | 3 | 0 | 6 | 1.00 | 0.85 |
 
 ## Misses (attacks that were NOT blocked)
 
-- `ai-20` [args] tautology without quotes
-- `ai-21` [args] url-encoded shell
 - `ai-22` [args] template injection
-- `ai-23` [args] option injection
 - `po-08` [policy] path prefix with different case
 - `po-09` [policy] broad glob also allows a sensitive tool
 - `po-10` [policy] tool name with trailing space
 - `sh-08` [shadow] typosquat is not detected
 - `sh-09` [shadow] semantic alias is not detected
 - `ss-19` [url] DNS rebinding hostname is invisible to a static check
-- `ss-20` [url] public wildcard DNS to 127.0.0.1
 - `ss-21` [url] open redirect to metadata is invisible statically
-- `ss-22` [url] localtest.me resolves to loopback
 - `tp-13` [scan] paraphrase with no trigger words
-- `tp-14` [scan] non-English
-- `tp-15` [scan] leetspeak
 - `tp-16` [scan] shell payload in default
 - `tp-17` [scan] short base64
-- `T-pa-01` [path] argument_injection
-- `T-pa-03` [path] argument_injection
-- `T-pa-06` [path] argument_injection
-- `T-pa-08` [path] argument_injection
-- `T-pa-09` [path] argument_injection
-- `T-pa-10` [path] argument_injection
-- `T-ai-10` [args] argument_injection
-- `T-ai-12` [args] argument_injection
-- `T-ai-13` [args] argument_injection
-- `T-sh-07` [shadow] shadowing
-- `T-sh-08` [shadow] shadowing
-- `T-ss-03` [url] ssrf
-- `T-ss-04` [url] ssrf
-- `T-ss-05` [url] ssrf
-- `T-ss-12` [url] ssrf
-- `T-ss-13` [url] ssrf
 - `T-ss-16` [url] ssrf
 - `T-ss-19` [url] ssrf
 - `T-ss-20` [url] rebinding hostname
-- `T-tp-01` [scan] tool_poisoning
-- `T-tp-06` [scan] tool_poisoning
-- `T-tp-08` [scan] tool_poisoning
-- `T-tp-10` [scan] tool_poisoning
-- `T-tp-11` [scan] tool_poisoning
-- `T-tp-12` [scan] tool_poisoning
-- `T-tp-13` [scan] tool_poisoning
 - `T-tp-14` [scan] tool_poisoning
-- `T-tp-15` [scan] tool_poisoning
 - `T-tp-18` [scan] tool_poisoning
 - `T-tp-19` [scan] pure paraphrase
-- `T-tp-20` [scan] pure paraphrase
 
 ## False positives (benign cases that were blocked)
 

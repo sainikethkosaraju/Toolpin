@@ -23,6 +23,7 @@ from toolpin.constraints import check_arguments
 from toolpin.ifc import IFC
 from toolpin.lockfile import Lockfile
 from toolpin.oob import OutOfBandApprovals
+from toolpin.outputs import OutputPolicy, inspect_output
 from toolpin.policy.decision import PolicyEngine, PolicyRequest
 
 GENERIC_DENY = "call denied"
@@ -40,6 +41,7 @@ class GateConfig:
     no_mrtr: str = "deny"  # deny | out_of_band
     oob: OutOfBandApprovals | None = None
     ifc: IFC | None = None
+    output: OutputPolicy | None = None
     session_fn: Callable[[Any], str] = lambda ctx: "default"
 
 
@@ -117,7 +119,23 @@ class Gate:
             return result
         text = "".join(getattr(c, "text", "") or "" for c in getattr(result, "content", []) or [])
         if cfg.ifc is not None:
-            cfg.ifc.observe_result(sid, name, text)
+            cfg.ifc.observe_result(sid, name, text)                 # fingerprint the ORIGINAL (pre-redaction) text
+        if cfg.output is not None and text:
+            rep = inspect_output(text, cfg.output)
+            if rep.injection and cfg.ifc is not None:               # dynamic labelling: this tool just fed us untrusted text
+                cfg.ifc.session(sid).untrusted_exposed = True
+            if rep.secrets or rep.injection:
+                self._log(principal, name, "inspect", "outputs", f"secrets={rep.secrets} injection={rep.injection}",
+                          arguments)
+            if rep.blocked:
+                raise self._deny(principal, name, "outputs", "instruction-like content in tool result", arguments,
+                                 f"{GENERIC_DENY}: tool result rejected")
+            if rep.text != text:
+                first = True
+                for c in result.content:
+                    if getattr(c, "text", None) is not None:
+                        c.text = rep.text if first else ""
+                        first = False
         size = len(text)
         cfg.budgets.record(name, not getattr(result, "is_error", False))
         if (r := cfg.budgets.check_output(size)):

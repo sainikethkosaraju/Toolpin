@@ -167,7 +167,6 @@ def confusion(results: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
 
 
 def render(results: list[dict[str, Any]]) -> str:
-    conf = confusion(results)
     fmt = lambda x: "n/a" if x is None else f"{x:.2f}"  # noqa: E731
     lines = ["# Corpus results", "",
              f"{len(results)} labelled cases ({sum(r['label'] == 'attack' for r in results)} attacks, "

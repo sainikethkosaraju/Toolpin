@@ -21,14 +21,49 @@ def _tools(path: str) -> list:
     return d["tools"] if isinstance(d, dict) else d
 
 
+def _priv(path: str):
+    from cryptography.hazmat.primitives.serialization import load_pem_private_key
+    return load_pem_private_key(Path(path).read_bytes(), password=None)
+
+
+def _pub(path: str):
+    from cryptography.hazmat.primitives.serialization import load_pem_public_key
+    return load_pem_public_key(Path(path).read_bytes())
+
+
+def cmd_keygen(a: argparse.Namespace) -> int:
+    from cryptography.hazmat.primitives import serialization as ser
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+    k = Ed25519PrivateKey.generate()
+    out = Path(a.out)
+    out.write_bytes(k.private_bytes(ser.Encoding.PEM, ser.PrivateFormat.PKCS8, ser.NoEncryption()))
+    out.chmod(0o600)
+    out.with_suffix(".pub").write_bytes(k.public_key().public_bytes(ser.Encoding.PEM, ser.PublicFormat.SubjectPublicKeyInfo))
+    print(f"wrote {out} (private, 0600) and {out.with_suffix('.pub')}")
+    return 0
+
+
 def cmd_lock(a: argparse.Namespace) -> int:
-    Lockfile.lock(_tools(a.tools_json), a.server).save(a.lockfile)
-    print(f"locked {len(_tools(a.tools_json))} tools -> {a.lockfile}")
+    lock = Lockfile.lock(_tools(a.tools_json), a.server)
+    if a.policy:
+        lock.pin_policy(Path(a.policy).read_text())
+    lock.save(a.lockfile, _priv(a.sign) if a.sign else None)
+    print(f"locked {len(_tools(a.tools_json))} tools -> {a.lockfile}" + (" (signed)" if a.sign else "")
+          + (" (policy pinned)" if a.policy else ""))
     return 0
 
 
 def cmd_verify(a: argparse.Namespace) -> int:
-    viol = Lockfile.load(a.lockfile).verify(_tools(a.tools_json))
+    from toolpin.lockfile import SignatureError
+    try:
+        lock = Lockfile.load(a.lockfile, _pub(a.pubkey) if a.pubkey else None)
+    except SignatureError as e:
+        print(f"FAILED: {e}")
+        return 1
+    if a.policy and not lock.verify_policy(Path(a.policy).read_text()):
+        print("FAILED: policy file differs from the one pinned in the lockfile")
+        return 1
+    viol = lock.verify(_tools(a.tools_json))
     for v in viol:
         print(f"{v.kind}: {v.tool} ({v.detail})")
     bad = [v for v in viol if v.blocking]
@@ -69,6 +104,29 @@ def cmd_approve_call(a: argparse.Namespace) -> int:
     return 0 if ok else 1
 
 
+def cmd_run(a: argparse.Namespace) -> int:
+    """Serve a gated proxy on stdio in front of the upstream command (spawned in the configured sandbox)."""
+    import anyio
+
+    from toolpin.config import ConfigError, load_config
+    from toolpin.proxy import build_proxy, connect_upstream
+    try:
+        cfg, sandbox = load_config(a.config)
+    except ConfigError as e:
+        print(f"config error: {e}", file=sys.stderr)
+        return 2
+    cmd = [c for c in a.upstream if c != "--"]
+    if not cmd:
+        print("give the upstream command after --", file=sys.stderr)
+        return 2
+
+    async def main_() -> None:
+        async with connect_upstream(cmd[0], sandbox, cmd[1:]) as upstream:
+            await build_proxy(upstream, cfg, launch_record=sandbox.launch_record(cmd[0], cmd[1:])).run_stdio_async()
+    anyio.run(main_)
+    return 0
+
+
 def cmd_corpus(a: argparse.Namespace) -> int:
     from toolpin import corpus
     results = corpus.run(corpus.load_cases(a.dir, a.split))
@@ -91,8 +149,12 @@ def main(argv: list[str] | None = None) -> int:
     for name, fn in (("lock", cmd_lock), ("verify", cmd_verify), ("scan", cmd_scan)):
         s = sub.add_parser(name); s.add_argument("tools_json"); s.add_argument("--lockfile", default="toolpin.lock")
         if name == "lock":
-            s.add_argument("--server", default="")
+            s.add_argument("--server", default=""); s.add_argument("--sign", help="Ed25519 private key (PEM)")
+            s.add_argument("--policy", help="policy file to pin by hash")
+        if name == "verify":
+            s.add_argument("--pubkey", help="require a valid signature from this key"); s.add_argument("--policy")
         s.set_defaults(fn=fn)
+    s = sub.add_parser("keygen"); s.add_argument("--out", default="toolpin.key"); s.set_defaults(fn=cmd_keygen)
     s = sub.add_parser("approve"); s.add_argument("tool"); s.add_argument("tools_json")
     s.add_argument("--lockfile", default="toolpin.lock"); s.set_defaults(fn=cmd_approve)
     s = sub.add_parser("policy"); ps = s.add_subparsers(dest="sub", required=True)
@@ -100,6 +162,8 @@ def main(argv: list[str] | None = None) -> int:
     d.set_defaults(fn=cmd_policy_diff)
     s = sub.add_parser("approve-call"); s.add_argument("ref"); s.add_argument("--store", default="toolpin-oob.json")
     s.set_defaults(fn=cmd_approve_call)
+    s = sub.add_parser("run"); s.add_argument("--config", default="toolpin.yaml")
+    s.add_argument("upstream", nargs=argparse.REMAINDER); s.set_defaults(fn=cmd_run)
     s = sub.add_parser("corpus"); s.add_argument("--dir", default="corpus"); s.add_argument("--out")
     s.add_argument("--split", choices=["dev", "test"])
     s.set_defaults(fn=cmd_corpus)

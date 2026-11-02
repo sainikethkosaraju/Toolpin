@@ -1,25 +1,26 @@
 # Threat model
-**Assets:** the user's data and actions reachable through MCP tools. **Adversaries:** a malicious or compromised MCP server (poisoned/changed tools), a prompt-injected agent, a malicious client, a network attacker between client and gate.
+**Assets:** the user's data and the actions reachable through MCP tools. **Adversaries:** a malicious or compromised MCP server (poisoned/changed tools, injected results), a prompt-injected agent, a malicious client, a network attacker.
 
 | Threat | Control | Evidence |
 | --- | --- | --- |
-| Tool poisoning (hidden instructions) | `scan` (heuristic) + lockfile review | corpus `tp-*` (misses published) |
-| Rug pull (definition changes after approval) | lockfile hash over the full canonical definition; changed/added tools are hidden and uncallable | corpus `rp-*`, `tests/test_core.py` |
-| Shadowing / name collision | exact + look-alike name check | corpus `sh-*` |
-| SSRF | static URL check (stdlib `ipaddress`, handles decimal/hex/octal/short/mapped forms), optional resolver | corpus `ss-*` |
-| Argument injection | path containment, injection heuristic, numeric ceilings | corpus `ai-*` |
-| Confused deputy | audience-bound claims, no token passthrough, principal-bound handles | corpus `cd-*`, `hh-*` |
-| Approval forgery/replay/tamper/expiry | HMAC token bound to principal+tool+canonical-args hash+nonce+expiry; nonce single-use | corpus `ap-*`, `tests/test_gate.py` |
-| Unlogged actions | hash-chained audit of digests (not raw args), optional Ed25519 | `tests/test_core.py` |
+| Rug pull / tool poisoning at lock time | canonical-hash lockfile (optionally Ed25519-signed, policy-pinned); lock-time scan | `tests/test_core.py`, `tests/test_hardening.py`, corpus, `tests/test_proxy.py` |
+| Poisoned results (indirect injection) | output inspection (annotate/block), dynamic untrusted label | `tests/test_hardening.py` |
+| Exfiltration by a prompt-injected agent | IFC trifecta + value-flow rules; approvals | `tests/test_ifc.py`, [stack-bench.md](stack-bench.md) |
+| Secrets in tool output | redaction before the model sees them | `tests/test_hardening.py` |
+| SSRF / path traversal / injection in arguments | canonicalising constraints (heuristic where noted) | corpus, [redteam.md](redteam.md) |
+| Approval forgery / replay / tampering / expiry | HMAC token over principal+tool+args hash+nonce+expiry+kid; durable single-use nonces; key rotation | `tests/test_core.py`, `tests/test_hardening.py` (24 concurrent redemptions: exactly 1 wins) |
+| Confused deputy / wrong audience | JWKS (RS256/ES256) verification with an algorithm allow-list, audience = this resource (RFC 8707), RFC 9728 metadata | `tests/test_hardening.py` |
+| Malicious upstream process | sandboxed spawn (env, rlimits, no_new_privs, bwrap optional) | `tests/test_proxy.py` |
+| Lying about what happened | hash-chained audit of digests, optional Ed25519 | `tests/test_core.py` |
 
 ## NOT covered (read this)
-- **Malicious behaviour behind an unchanged definition.** The lock pins the *description*, not what the server does. A server that was malicious at lock time stays malicious.
-- **Heuristic controls miss things.** `scan`, `args`, `shadow` and `policy` have published misses in [corpus/RESULTS.md](../corpus/RESULTS.md) (paraphrase, non-English, leetspeak, encoded payloads, typosquats, DNS rebinding, redirects, over-broad globs).
-- **SSRF is static** unless you supply a resolver; even then DNS rebinding between check and fetch (TOCTOU) is possible. Pin the resolved address when you fetch.
-- **Tool outputs** (indirect prompt injection in returned data) are not inspected; only size is capped.
-- **Process compromise / secret theft.** The approval secret lives in your process environment. Anyone with it can mint approvals.
-- **A human who approves blindly.** The approval message shows the canonical arguments (truncated at 500 chars).
-- **Audit tail truncation** is undetectable without a pinned head hash; the audit is unsigned unless you configure a key.
-- **Transport authentication**: `identity.py` validates claims you hand it; it is not an OAuth server and `verify_hs256_jwt` is a minimal shared-secret verifier.
-- **Multi-worker deployments:** the nonce store is in-memory per process (and the SDK's `requestState` key is ephemeral unless configured). Replay protection across workers needs a shared store.
-- **Proxy modes (stdio/HTTP) are not implemented** (cut per the blueprint's scope rule 4). Library mode wraps an official-SDK `MCPServer`.
+- **A server that is malicious at lock time and never changes** passes the lockfile; only review, the scanner (heuristic) and IFC/approvals limit the damage.
+- **Heuristics miss things**: see [redteam.md](redteam.md). Round-2 operators initially evaded 7-71% of the time; paraphrase and novel languages are structurally out of reach of pattern matching.
+- **IFC cannot see paraphrase / lossy re-expression / covert channels**, and a private-only session can leak by paraphrase (accepted).
+- **SSRF is static** unless you pass a resolver; DNS rebinding between check and fetch is possible.
+- **Sandbox is not a security boundary** against a determined malicious server (use bwrap/containers).
+- **The approval secret and IFC secret live in your process environment.** Anyone holding them can mint approvals / read fingerprints.
+- **A human who approves blindly.** The prompt shows canonical arguments (truncated at 500 chars).
+- **Audit tail truncation** is undetectable without pinning a head; the audit file is unsigned unless a key is configured, and Toolpin does not (unlike Ontolite) use a Merkle log.
+- **JWKS fetching, caching and rotation** are the caller's job (`jwks` may be a callable); there is no OAuth server here.
+- **Upstream elicitation** is unsupported through the proxy; HTTP-upstream proxy mode is exercised by the SDK client only (no network test in CI).

@@ -6,8 +6,10 @@ import time
 from mcp import Client
 from mcp.server.mcpserver import MCPServer
 
+from toolpin.ifc import IFC, IFCConfig, ToolLabels
 from toolpin.lockfile import Lockfile
 from toolpin.middleware import GateConfig, guard
+from toolpin.outputs import OutputPolicy
 from toolpin.policy import YamlPolicy
 
 N = 500
@@ -37,12 +39,15 @@ async def measure(s):
 
 async def main():
     base = build()
-    gated = build()
-    lock = Lockfile.lock(await gated.list_tools())
-    guard(gated, GateConfig(lock, YamlPolicy([{"id": "a", "effect": "allow", "tools": ["echo"]}]),
-                            constraints={"echo": {"safe_args": ["text"]}}))
-    b, g = await measure(base), await measure(gated)
-    print(f"ungated median {b[0]:.3f} ms p95 {b[1]:.3f} ms | gated median {g[0]:.3f} ms p95 {g[1]:.3f} ms "
-          f"| overhead median {g[0]-b[0]:.3f} ms")
+    basic = build()
+    full = build()
+    pol = YamlPolicy([{"id": "a", "effect": "allow", "tools": ["echo"]}])
+    guard(basic, GateConfig(Lockfile.lock(await basic.list_tools()), pol, constraints={"echo": {"safe_args": ["text"]}}))
+    guard(full, GateConfig(Lockfile.lock(await full.list_tools()), pol, constraints={"echo": {"safe_args": ["text"]}},
+                           ifc=IFC(IFCConfig(tools={"echo": ToolLabels(private=True)}), b"k" * 32), output=OutputPolicy()))
+    b, g1, g2 = await measure(base), await measure(basic), await measure(full)
+    print(f"ungated        median {b[0]:.3f} ms  p95 {b[1]:.3f} ms")
+    print(f"basic gate     median {g1[0]:.3f} ms  p95 {g1[1]:.3f} ms  (+{g1[0]-b[0]:.3f} ms)  lockfile + policy + constraints")
+    print(f"full gate      median {g2[0]:.3f} ms  p95 {g2[1]:.3f} ms  (+{g2[0]-b[0]:.3f} ms)  + IFC fingerprinting + output inspection")
 
 asyncio.run(main())

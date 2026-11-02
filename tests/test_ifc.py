@@ -156,3 +156,14 @@ def test_limits_are_real_plain_prose_is_only_caught_by_shingles():
     ifc.observe_result("s", "r", "The board will announce the acquisition of Helios Systems next Tuesday morning.")
     assert ifc.check_call("s", "e", {"x": "board will announce the acquisition of Helios"}).kind == "deny"   # 5-word overlap
     assert ifc.check_call("s", "e", {"x": "a deal for Helios is coming on Tuesday"}).kind == "allow"          # paraphrase evades
+
+
+def test_figures_are_tracked_in_any_formatting_but_years_and_small_numbers_are_not():
+    """Found by the stack benchmark: a private figure (48215.0) was not fingerprinted because atoms had to be
+    identifier-like, so a base64 copy of it left in an email body slipped through."""
+    ifc = IFC(IFCConfig(tools={"r": ToolLabels(private=True), "e": ToolLabels(egress=True)}), b"k" * 32)
+    ifc.observe_result("s", "r", '{"tag": "Revenues", "value": 48215.0, "year": 2026, "count": 12}')
+    for leak in ("revenue=48215", "revenue = 48,215", "48215.00 USD", base64.b64encode(b"revenue=48215.0").decode()):
+        assert ifc.check_call("s", "e", {"body": leak}).kind == "deny", leak
+    for fine in ("fiscal year 2026", "we have 12 items", "call 555-0100", "total 4821"):
+        assert ifc.check_call("s", "e", {"body": fine}).kind == "allow", fine
