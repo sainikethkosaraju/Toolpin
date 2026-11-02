@@ -71,7 +71,7 @@ def cmd_approve_call(a: argparse.Namespace) -> int:
 
 def cmd_corpus(a: argparse.Namespace) -> int:
     from toolpin import corpus
-    results = corpus.run(corpus.load_cases(a.dir))
+    results = corpus.run(corpus.load_cases(a.dir, a.split))
     text = corpus.render(results)
     if a.out:
         Path(a.out).write_text(text)
@@ -101,6 +101,7 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("approve-call"); s.add_argument("ref"); s.add_argument("--store", default="toolpin-oob.json")
     s.set_defaults(fn=cmd_approve_call)
     s = sub.add_parser("corpus"); s.add_argument("--dir", default="corpus"); s.add_argument("--out")
+    s.add_argument("--split", choices=["dev", "test"])
     s.set_defaults(fn=cmd_corpus)
     s = sub.add_parser("audit"); au = s.add_subparsers(dest="sub", required=True)
     v = au.add_parser("verify"); v.add_argument("path"); v.add_argument("--head"); v.set_defaults(fn=cmd_audit_verify)

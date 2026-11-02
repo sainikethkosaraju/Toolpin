@@ -1,0 +1,26 @@
+- {id: T-ss-01, category: ssrf, label: attack, control: url, input: {url: "http://127.0.0.1.:8080/"}}
+- {id: T-ss-02, category: ssrf, label: attack, control: url, input: {url: "http://localhost./admin"}}
+- {id: T-ss-03, category: ssrf, label: attack, control: url, input: {url: "http://①②⑦.0.0.1/"}}
+- {id: T-ss-04, category: ssrf, label: attack, control: url, input: {url: "http://１２７．０．０．１/"}}
+- {id: T-ss-05, category: ssrf, label: attack, control: url, input: {url: "http://127。0。0。1/"}}
+- {id: T-ss-06, category: ssrf, label: attack, control: url, input: {url: "http://0x7f.0.0.1/"}}
+- {id: T-ss-07, category: ssrf, label: attack, control: url, input: {url: "http://0177.0.0.01/"}}
+- {id: T-ss-08, category: ssrf, label: attack, control: url, input: {url: "http://017700000001/"}}
+- {id: T-ss-09, category: ssrf, label: attack, control: url, input: {url: "http://[::ffff:7f00:1]/"}}
+- {id: T-ss-10, category: ssrf, label: attack, control: url, input: {url: "http://[0:0:0:0:0:ffff:169.254.169.254]/"}}
+- {id: T-ss-11, category: ssrf, label: attack, control: url, input: {url: "http://[fe80::1%25eth0]/"}}
+- {id: T-ss-12, category: ssrf, label: attack, control: url, input: {url: "http://%31%32%37.0.0.1/"}}
+- {id: T-ss-13, category: ssrf, label: attack, control: url, input: {url: "http://169.254.169.254.nip.io/"}}
+- {id: T-ss-14, category: ssrf, label: attack, control: url, input: {url: "http://metadata.google.internal./"}}
+- {id: T-ss-15, category: ssrf, label: attack, control: url, input: {url: "http://192.168.0.1:80@example.com/"}}
+- {id: T-ss-16, category: ssrf, label: attack, control: url, input: {url: "https://example.com#@127.0.0.1/"}}
+- {id: T-ss-17, category: ssrf, label: attack, control: url, input: {url: "http://100.100.100.200/latest/meta-data/"}}
+- {id: T-ss-18, category: ssrf, label: attack, control: url, input: {url: "http://198.18.0.5/"}}
+- {id: T-ss-19, category: ssrf, label: attack, control: url, input: {url: "http://224.0.0.1/"}}
+- {id: T-ss-20, category: ssrf, label: attack, control: url, note: rebinding hostname, expected to evade a static check, input: {url: "http://attacker-controlled-dns.example/"}}
+- {id: T-sb-01, category: benign_call, label: benign, control: url, input: {url: "https://example.org/a/b?c=d#e"}}
+- {id: T-sb-02, category: benign_call, label: benign, control: url, input: {url: "https://sub.example.com:8443/path"}}
+- {id: T-sb-03, category: benign_call, label: benign, control: url, input: {url: "http://8.8.8.8/dns"}}
+- {id: T-sb-04, category: benign_call, label: benign, control: url, input: {url: "https://münchen.example/seite"}}
+- {id: T-sb-05, category: benign_call, label: benign, control: url, input: {url: "https://api.example.com/users/127.0.0.1"}}
+- {id: T-sb-06, category: benign_call, label: benign, control: url, input: {url: "https://example.com/?next=http://localhost/"}}

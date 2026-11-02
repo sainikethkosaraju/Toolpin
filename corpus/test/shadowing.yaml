@@ -1,0 +1,12 @@
+- {id: T-sh-01, category: shadowing, label: attack, control: shadow, input: {name: "ｒｅａｄ＿ｆｉｌｅ", known: [read_file]}}
+- {id: T-sh-02, category: shadowing, label: attack, control: shadow, input: {name: "READ_FILE", known: [read_file]}}
+- {id: T-sh-03, category: shadowing, label: attack, control: shadow, input: {name: "read file", known: [read_file]}}
+- {id: T-sh-04, category: shadowing, label: attack, control: shadow, input: {name: "read­file", known: [read_file]}}
+- {id: T-sh-05, category: shadowing, label: attack, control: shadow, input: {name: "rеad_filе", known: [read_file]}}
+- {id: T-sh-06, category: shadowing, label: attack, control: shadow, input: {name: "readFile", known: [read_file]}}
+- {id: T-sh-07, category: shadowing, label: attack, control: shadow, input: {name: "read_fi1e", known: [read_file]}}
+- {id: T-sh-08, category: shadowing, label: attack, control: shadow, input: {name: "read_file_v2", known: [read_file]}}
+- {id: T-shb-01, category: benign_tool, label: benign, control: shadow, input: {name: "write_file", known: [read_file]}}
+- {id: T-shb-02, category: benign_tool, label: benign, control: shadow, input: {name: "list_files", known: [read_file, write_file]}}
+- {id: T-shb-03, category: benign_tool, label: benign, control: shadow, input: {name: "read_fil", known: [read_file]}}
+- {id: T-shb-04, category: benign_tool, label: benign, control: shadow, input: {name: "unread_file", known: [read_file]}}
