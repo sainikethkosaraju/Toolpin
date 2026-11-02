@@ -1,0 +1,17 @@
+# controls: identity (resource server for aud https://srv, trusted issuer idp, now=1000), handle
+- {id: cd-01, category: confused_deputy, label: attack, control: identity, note: token minted for another service, input: {claims: {aud: "https://other", iss: idp, exp: 2000, sub: alice}}}
+- {id: cd-02, category: confused_deputy, label: attack, control: identity, input: {claims: {iss: idp, exp: 2000, sub: alice}}}
+- {id: cd-03, category: confused_deputy, label: attack, control: identity, input: {claims: {aud: ["a", "b"], iss: idp, exp: 2000, sub: alice}}}
+- {id: cd-04, category: confused_deputy, label: attack, control: identity, input: {claims: {aud: "https://srv", iss: evil, exp: 2000, sub: alice}}}
+- {id: cd-05, category: confused_deputy, label: attack, control: identity, input: {claims: {aud: "https://srv", iss: idp, exp: 500, sub: alice}}}
+- {id: cd-06, category: confused_deputy, label: attack, control: identity, input: {claims: {aud: "https://srv", iss: idp, sub: alice}}}
+- {id: cd-07, category: confused_deputy, label: attack, control: identity, input: {claims: {aud: "https://srv", iss: idp, exp: 2000, sub: ""}}}
+- {id: cd-08, category: confused_deputy, label: attack, control: identity, note: alg none, input: {jwt_alg: none}}
+- {id: cd-09, category: confused_deputy, label: attack, control: identity, note: wrong signing key, input: {jwt_alg: HS256, jwt_key: wrong}}
+- {id: cd-10, category: confused_deputy, label: attack, control: identity, note: algorithm confusion, input: {jwt_alg: HS512}}
+- {id: cd-11, category: confused_deputy, label: attack, control: identity, note: token passthrough upstream, input: {passthrough: {Authorization: "Bearer inbound-token-123"}, inbound: inbound-token-123}}
+- {id: cd-12, category: confused_deputy, label: attack, control: identity, note: token passthrough in custom header, input: {passthrough: {X-Forward: "inbound-token-123"}, inbound: inbound-token-123}}
+- {id: bn-i01, category: benign_call, label: benign, control: identity, input: {claims: {aud: "https://srv", iss: idp, exp: 2000, sub: alice}}}
+- {id: bn-i02, category: benign_call, label: benign, control: identity, input: {claims: {aud: ["x", "https://srv"], iss: idp, exp: 2000, sub: bob}}}
+- {id: bn-i03, category: benign_call, label: benign, control: identity, input: {jwt_alg: HS256, jwt_key: right}}
+- {id: bn-i04, category: benign_call, label: benign, control: identity, input: {passthrough: {Authorization: "Bearer service-credential"}, inbound: inbound-token-123}}

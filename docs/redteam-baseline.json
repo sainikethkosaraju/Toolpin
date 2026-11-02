@@ -1,0 +1,394 @@
+{
+ "args": {
+  "by_operator": {
+   "case_mix": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "comment_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "double_url_encoded": {
+    "evaded": 12,
+    "rate": 1.0,
+    "total": 12
+   },
+   "fullwidth": {
+    "evaded": 11,
+    "rate": 0.917,
+    "total": 12
+   },
+   "ifs_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "newline_instead_of_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "split_keyword": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 3
+   },
+   "tab_space": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "url_encoded": {
+    "evaded": 12,
+    "rate": 1.0,
+    "total": 12
+   }
+  },
+  "evaded": 35,
+  "evasion_rate": 0.372,
+  "mutants": 94,
+  "seeds_blocked_plain": 12,
+  "seeds_total": 16
+ },
+ "heldout": {
+  "args": {
+   "FN": 3,
+   "FP": 0,
+   "TN": 8,
+   "TP": 11,
+   "precision": 1.0,
+   "recall": 0.7857142857142857
+  },
+  "path": {
+   "FN": 6,
+   "FP": 0,
+   "TN": 6,
+   "TP": 6,
+   "precision": 1.0,
+   "recall": 0.5
+  },
+  "scan": {
+   "FN": 12,
+   "FP": 1,
+   "TN": 9,
+   "TP": 8,
+   "precision": 0.8888888888888888,
+   "recall": 0.4
+  },
+  "shadow": {
+   "FN": 2,
+   "FP": 0,
+   "TN": 4,
+   "TP": 6,
+   "precision": 1.0,
+   "recall": 0.75
+  },
+  "url": {
+   "FN": 8,
+   "FP": 0,
+   "TN": 6,
+   "TP": 12,
+   "precision": 1.0,
+   "recall": 0.6
+  }
+ },
+ "path": {
+  "by_operator": {
+   "backslash": {
+    "evaded": 2,
+    "rate": 0.2,
+    "total": 10
+   },
+   "dot_segments": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 5
+   },
+   "double_encoded": {
+    "evaded": 2,
+    "rate": 0.182,
+    "total": 11
+   },
+   "file_scheme": {
+    "evaded": 3,
+    "rate": 0.25,
+    "total": 12
+   },
+   "fullwidth_dots": {
+    "evaded": 6,
+    "rate": 0.75,
+    "total": 8
+   },
+   "mixed_slashes": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "null_mid": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 10
+   },
+   "overlong_slash": {
+    "evaded": 9,
+    "rate": 0.9,
+    "total": 10
+   },
+   "percent_backslash": {
+    "evaded": 2,
+    "rate": 0.2,
+    "total": 10
+   },
+   "percent_encoded": {
+    "evaded": 2,
+    "rate": 0.182,
+    "total": 11
+   },
+   "repeated_dots": {
+    "evaded": 5,
+    "rate": 1.0,
+    "total": 5
+   },
+   "trailing_space": {
+    "evaded": 1,
+    "rate": 0.083,
+    "total": 12
+   }
+  },
+  "evaded": 32,
+  "evasion_rate": 0.281,
+  "mutants": 114,
+  "seeds_blocked_plain": 12,
+  "seeds_total": 12
+ },
+ "scan": {
+  "by_operator": {
+   "base64": {
+    "evaded": 3,
+    "rate": 0.231,
+    "total": 13
+   },
+   "code_fence": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "fullwidth": {
+    "evaded": 10,
+    "rate": 0.769,
+    "total": 13
+   },
+   "homoglyph": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "html_comment": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "leetspeak": {
+    "evaded": 8,
+    "rate": 0.615,
+    "total": 13
+   },
+   "mixed_case": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "nbsp": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "padding": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "rot13": {
+    "evaded": 8,
+    "rate": 0.615,
+    "total": 13
+   },
+   "soft_hyphen": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   },
+   "spaced": {
+    "evaded": 10,
+    "rate": 0.769,
+    "total": 13
+   },
+   "tabs": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 11
+   },
+   "translate": {
+    "evaded": 1,
+    "rate": 0.333,
+    "total": 3
+   },
+   "zero_width": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 13
+   }
+  },
+  "evaded": 40,
+  "evasion_rate": 0.222,
+  "mutants": 180,
+  "seeds_blocked_plain": 13,
+  "seeds_total": 20
+ },
+ "shadow": {
+  "by_operator": {
+   "camel": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "digit_lookalike": {
+    "evaded": 1,
+    "rate": 1.0,
+    "total": 1
+   },
+   "dot_sep": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "fullwidth": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "homoglyph": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "soft_hyphen": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "space_sep": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   },
+   "upper": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 1
+   }
+  },
+  "evaded": 1,
+  "evasion_rate": 0.125,
+  "mutants": 8,
+  "seeds_blocked_plain": 1,
+  "seeds_total": 1
+ },
+ "url": {
+  "by_operator": {
+   "backslash_authority": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 21
+   },
+   "ip_decimal": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_fullwidth": {
+    "evaded": 11,
+    "rate": 0.917,
+    "total": 12
+   },
+   "ip_hex": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_ideographic_dots": {
+    "evaded": 11,
+    "rate": 0.917,
+    "total": 12
+   },
+   "ip_ipv4_mapped": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_ipv4_mapped_hex": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_leading_zeros": {
+    "evaded": 4,
+    "rate": 0.4,
+    "total": 10
+   },
+   "ip_mixed_radix": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_octal": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_octal_octets": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "ip_pct_encoded": {
+    "evaded": 11,
+    "rate": 0.917,
+    "total": 12
+   },
+   "ip_trailing_dot": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 12
+   },
+   "tab_in_url": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 21
+   },
+   "trailing_dot_host": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 21
+   },
+   "upper_scheme": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 21
+   },
+   "userinfo_prefix": {
+    "evaded": 0,
+    "rate": 0.0,
+    "total": 21
+   }
+  },
+  "evaded": 37,
+  "evasion_rate": 0.15,
+  "mutants": 247,
+  "seeds_blocked_plain": 21,
+  "seeds_total": 25
+ }
+}

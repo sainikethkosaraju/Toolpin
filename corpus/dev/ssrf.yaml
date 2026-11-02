@@ -1,0 +1,28 @@
+# control: url  (public-only mode: no host allow-list, no resolver)
+- {id: ss-01, category: ssrf, label: attack, control: url, input: {url: "http://127.0.0.1:8080/admin"}}
+- {id: ss-02, category: ssrf, label: attack, control: url, input: {url: "http://localhost/"}}
+- {id: ss-03, category: ssrf, label: attack, control: url, input: {url: "http://169.254.169.254/latest/meta-data/"}}
+- {id: ss-04, category: ssrf, label: attack, control: url, input: {url: "http://10.0.0.5/"}}
+- {id: ss-05, category: ssrf, label: attack, control: url, input: {url: "http://192.168.1.1/"}}
+- {id: ss-06, category: ssrf, label: attack, control: url, input: {url: "http://172.16.0.9/"}}
+- {id: ss-07, category: ssrf, label: attack, control: url, input: {url: "http://[::1]/"}}
+- {id: ss-08, category: ssrf, label: attack, control: url, note: decimal ip, input: {url: "http://2130706433/"}}
+- {id: ss-09, category: ssrf, label: attack, control: url, note: hex ip, input: {url: "http://0x7f000001/"}}
+- {id: ss-10, category: ssrf, label: attack, control: url, note: octal ip, input: {url: "http://0177.0.0.1/"}}
+- {id: ss-11, category: ssrf, label: attack, control: url, note: short form, input: {url: "http://127.1/"}}
+- {id: ss-12, category: ssrf, label: attack, control: url, note: ipv4-mapped ipv6, input: {url: "http://[::ffff:169.254.169.254]/"}}
+- {id: ss-13, category: ssrf, label: attack, control: url, note: userinfo trick, input: {url: "http://example.com@127.0.0.1/"}}
+- {id: ss-14, category: ssrf, label: attack, control: url, input: {url: "http://metadata.google.internal/computeMetadata/v1/"}}
+- {id: ss-15, category: ssrf, label: attack, control: url, input: {url: "file:///etc/passwd"}}
+- {id: ss-16, category: ssrf, label: attack, control: url, input: {url: "gopher://127.0.0.1:6379/_INFO"}}
+- {id: ss-17, category: ssrf, label: attack, control: url, input: {url: "http://0.0.0.0:22/"}}
+- {id: ss-18, category: ssrf, label: attack, control: url, note: carrier-grade NAT range, input: {url: "http://100.64.0.1/"}}
+- {id: ss-19, category: ssrf, label: attack, control: url, note: DNS rebinding hostname is invisible to a static check, input: {url: "http://rebind.attacker.example/"}}
+- {id: ss-20, category: ssrf, label: attack, control: url, note: public wildcard DNS to 127.0.0.1, input: {url: "http://127.0.0.1.nip.io/"}}
+- {id: ss-21, category: ssrf, label: attack, control: url, note: open redirect to metadata is invisible statically, input: {url: "https://example.com/redirect?to=http://169.254.169.254/"}}
+- {id: ss-22, category: ssrf, label: attack, control: url, note: localtest.me resolves to loopback, input: {url: "http://localtest.me/"}}
+- {id: bn-u01, category: benign_call, label: benign, control: url, input: {url: "https://example.com/api/v1/items?id=3"}}
+- {id: bn-u02, category: benign_call, label: benign, control: url, input: {url: "https://api.github.com/repos/o/r"}}
+- {id: bn-u03, category: benign_call, label: benign, control: url, input: {url: "http://93.184.216.34/"}}
+- {id: bn-u04, category: benign_call, label: benign, control: url, input: {url: "https://www.sec.gov/files/x.zip"}}
+- {id: bn-u05, category: benign_call, label: benign, control: url, input: {url: "https://[2606:4700:4700::1111]/"}}

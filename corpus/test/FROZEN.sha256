@@ -1,0 +1,4 @@
+5936935d089be2862b8103fcf0a0dd7f26f5ddebc16ab5974b005213fec15a88  corpus/test/path_and_args.yaml
+ed64e680ad5613533e7fce0624ea89220616fcd6d67c6432e381fb5d4aa46280  corpus/test/shadowing.yaml
+927248547342b7fce2abddc77a1ca3ffaf2cfdcde11ff9e0f9656789c5387e37  corpus/test/ssrf.yaml
+71141c0476bbaa0cee04096edca039f10aa79c9d3891d4f35c1186aeac0a55ad  corpus/test/tool_poisoning.yaml

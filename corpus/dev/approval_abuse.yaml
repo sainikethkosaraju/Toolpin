@@ -1,0 +1,16 @@
+# control: approval  (issued for alice/wipe/{path:/data/x,n:1}; presented per mutate)
+- {id: ap-01, category: approval_abuse, label: attack, control: approval, note: forged confirm=true, input: {mutate: literal_true}}
+- {id: ap-02, category: approval_abuse, label: attack, control: approval, note: flipped signature bytes, input: {mutate: flip_sig}}
+- {id: ap-03, category: approval_abuse, label: attack, control: approval, note: argument tampering, input: {mutate: none, args: {path: "/data/y", n: 1}}}
+- {id: ap-04, category: approval_abuse, label: attack, control: approval, note: extra argument, input: {mutate: none, args: {path: "/data/x", n: 1, force: true}}}
+- {id: ap-05, category: approval_abuse, label: attack, control: approval, note: different tool, input: {mutate: none, tool: delete_all}}
+- {id: ap-06, category: approval_abuse, label: attack, control: approval, note: different principal, input: {mutate: none, principal: mallory}}
+- {id: ap-07, category: approval_abuse, label: attack, control: approval, note: replay, input: {mutate: replay}}
+- {id: ap-08, category: approval_abuse, label: attack, control: approval, note: expired, input: {mutate: none, at: 1000}}
+- {id: ap-09, category: approval_abuse, label: attack, control: approval, input: {mutate: empty}}
+- {id: ap-10, category: approval_abuse, label: attack, control: approval, note: payload only, input: {mutate: payload_only}}
+- {id: ap-11, category: approval_abuse, label: attack, control: approval, note: token minted under another key, input: {mutate: other_key}}
+- {id: ap-12, category: approval_abuse, label: attack, control: approval, note: extended expiry in payload, input: {mutate: extend_exp}}
+- {id: bn-p01, category: benign_call, label: benign, control: approval, input: {mutate: none}}
+- {id: bn-p02, category: benign_call, label: benign, control: approval, note: args key order differs, input: {mutate: none, args: {n: 1, path: "/data/x"}}}
+- {id: bn-p03, category: benign_call, label: benign, control: approval, input: {mutate: none, at: 299}}
