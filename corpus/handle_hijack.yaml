@@ -1,0 +1,11 @@
+# control: handle  (HandleBinder, ttl 10s, issued to alice at t=0, presented at t=5 unless noted)
+- {id: hh-01, category: handle_hijack, label: attack, control: handle, note: other principal replays alice's handle, input: {presented_by: bob, mutate: none}}
+- {id: hh-02, category: handle_hijack, label: attack, control: handle, note: guessed sequential handle, input: {presented_by: alice, mutate: guess}}
+- {id: hh-03, category: handle_hijack, label: attack, control: handle, note: swap handle id keep mac, input: {presented_by: alice, mutate: swap_id}}
+- {id: hh-04, category: handle_hijack, label: attack, control: handle, note: extend expiry, input: {presented_by: alice, mutate: extend_exp}}
+- {id: hh-05, category: handle_hijack, label: attack, control: handle, note: expired, input: {presented_by: alice, mutate: none, at: 50}}
+- {id: hh-06, category: handle_hijack, label: attack, control: handle, note: unsigned bare handle, input: {presented_by: alice, mutate: bare}}
+- {id: hh-07, category: handle_hijack, label: attack, control: handle, input: {presented_by: alice, mutate: empty}}
+- {id: hh-08, category: handle_hijack, label: attack, control: handle, note: truncated mac, input: {presented_by: alice, mutate: truncate}}
+- {id: bn-d01, category: benign_call, label: benign, control: handle, input: {presented_by: alice, mutate: none}}
+- {id: bn-d02, category: benign_call, label: benign, control: handle, input: {presented_by: alice, mutate: none, at: 9}}

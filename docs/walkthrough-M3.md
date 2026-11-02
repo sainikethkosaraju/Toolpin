@@ -1,0 +1,2 @@
+# Walkthrough: Toolpin
+Call path (`middleware.Gate.call_tool`): re-list tools and require the called tool be pinned+unchanged (rug pull) -> policy (default deny) -> argument constraints -> budgets/breaker -> approval (MRTR or out-of-band or deny) -> forward -> output cap -> audit. Why re-list on every call: the definition is checked at call time, not only at list time. Trade-off: one extra in-process list per call (measured, see limits). What breaks: multi-worker replay protection, tail-truncated audit, anything behind an unchanged definition.

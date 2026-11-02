@@ -1,0 +1,13 @@
+# control: shadow  (a second server claims a name)
+- {id: sh-01, category: shadowing, label: attack, control: shadow, input: {name: read_file, known: [read_file, write_file]}}
+- {id: sh-02, category: shadowing, label: attack, control: shadow, input: {name: Read_File, known: [read_file]}}
+- {id: sh-03, category: shadowing, label: attack, control: shadow, input: {name: read-file, known: [read_file]}}
+- {id: sh-04, category: shadowing, label: attack, control: shadow, input: {name: "read_file ", known: [read_file]}}
+- {id: sh-05, category: shadowing, label: attack, control: shadow, input: {name: "reаd_file", known: [read_file]}}
+- {id: sh-06, category: shadowing, label: attack, control: shadow, input: {name: "read​_file", known: [read_file]}}
+- {id: sh-07, category: shadowing, label: attack, control: shadow, input: {name: read.file, known: [read_file]}}
+- {id: sh-08, category: shadowing, label: attack, control: shadow, note: typosquat is not detected, input: {name: read_fiIe, known: [read_file]}}
+- {id: sh-09, category: shadowing, label: attack, control: shadow, note: semantic alias is not detected, input: {name: open_file, known: [read_file]}}
+- {id: bn-h01, category: benign_tool, label: benign, control: shadow, input: {name: write_file, known: [read_file]}}
+- {id: bn-h02, category: benign_tool, label: benign, control: shadow, input: {name: search, known: [read_file, write_file]}}
+- {id: bn-h03, category: benign_tool, label: benign, control: shadow, input: {name: list_issues, known: [create_issue]}}
