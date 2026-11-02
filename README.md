@@ -1,8 +1,21 @@
-# toolpin
+<h1 align="center">Toolpin</h1>
 
+<p align="center"><b>A session-aware gate for MCP tool use.</b><br>Information-flow control, call-bound approvals, a sandboxed proxy, and a red-team report that publishes what it misses.</p>
+
+<p align="center">
+  <a href="https://github.com/sainikethkosaraju/toolpin/actions/workflows/ci.yml"><img src="https://github.com/sainikethkosaraju/toolpin/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <img src="https://img.shields.io/badge/python-3.11%2B-blue" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license">
+</p>
+
+<p align="center"><a href="#quickstart">Quickstart</a> · <a href="#the-gate">The gate</a> · <a href="#evidence">Evidence</a> · <a href="#limitations">Limitations</a> · <a href="docs/redteam.md">Red-team report</a> · <a href="docs/landscape.md">Landscape</a></p>
+
+---
 A session-aware gate for MCP tool use. It sits between an agent and its tools (as a library around an official-SDK `MCPServer`, or as a sandboxed stdio proxy in front of *any* server) and decides each call with **memory of what the session has already seen**: pinned definitions, default-deny policy, call-bound human approvals, **information-flow control** for the "lethal trifecta", and inspection of tool results.
 
 > **Positioning (verified by a web search, not assumed):** tool-definition *lockfiles* already exist (`mcp-pin`, `heldfast`, `mcp-warden`, `vex-mcp`; see [docs/landscape.md](docs/landscape.md)). Toolpin has one, signed and policy-pinned, but does not rest on it. Its value is what happens *between* calls.
+
+## Quickstart
 
 ```bash
 pip install -e ".[dev]"
@@ -29,7 +42,7 @@ client -> [ lock check (re-list upstream every call) -> policy (default deny) ->
 - **Proxy** ([docs/proxy.md](docs/proxy.md)): sandboxed upstream spawn (scrubbed env, rlimits, `no_new_privs`, optional `bwrap`), rug pulls caught across a real process boundary.
 - **Identity**: JWKS RS256/ES256 verification with an algorithm allow-list, audience = this resource, RFC 9728 metadata. **Lockfile**: Ed25519-signed, policy-pinned.
 
-## Evidence (generated or tested; every number links to its source)
+## Evidence
 | Claim | Evidence |
 | --- | --- |
 | Stack benchmark: **10/10 applicable attacks succeed on an unprotected Ontolite server; 0/11 with Toolpin; 4/4 benign workflows still complete** (with a human approver) | [docs/stack-bench.md](docs/stack-bench.md), `bench/stack_bench.py`, `tests/test_cli_proxy_and_stack.py` |
@@ -42,7 +55,7 @@ client -> [ lock check (re-list upstream every call) -> policy (default deny) ->
 | Gate overhead: +0.15 ms (lockfile+policy+constraints), +0.26 ms (with IFC and result inspection) | `bench/overhead.py`, [docs/limits.md](docs/limits.md) |
 | Coverage 87% overall; approvals/identity/lockfile/outputs/scan >= 94%; `proxy/launch.py` runs in a child process so coverage does not see it | `pytest --cov` |
 
-## Limitations (plain words)
+## Limitations
 Read [docs/threat-model.md](docs/threat-model.md). Highlights: a server that is malicious at lock time and never changes is not caught by pinning; the heuristics (scan, SSRF, injection) have published misses and false positives; IFC cannot see paraphrase; SSRF is static; the sandbox is not a boundary against a determined attacker; `bwrap` was **not available** in the build sandbox so that path is untested beyond argument construction; the corpus, fuzzer and held-out set share one author; benchmarks use scripted attackers, **not real LLM agents** (the 40-task model benchmark needs your model keys and was not run).
 
 ## What I would do differently
@@ -53,3 +66,12 @@ Copy `.env.example` to `.env` (git-ignored). `TOOLPIN_APPROVAL_SECRET` and `TOOL
 
 ## AI assistance
 Written with Claude Code; every claim above links to a test, a generated file or a committed measurement. MIT licensed. See [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md), [CHANGELOG](CHANGELOG.md).
+
+## The stack
+Three independent, MIT-licensed repositories that answer one question: *how do you let an agent touch real data and take real actions, and prove it behaves?*
+
+| Repo | Role |
+| --- | --- |
+| [**ontolite**](https://github.com/sainikethkosaraju/ontolite) | the governed data layer: typed objects, staged actions, per-principal answers, tamper-evident audit |
+| [**toolpin**](https://github.com/sainikethkosaraju/toolpin) | the trust layer between agent and tools: pinned definitions, information-flow control, approvals bound to the exact call |
+| [**passk**](https://github.com/sainikethkosaraju/passk) | the measurement layer: reliability (pass^k) with honest intervals, cost per success, regression gates |
