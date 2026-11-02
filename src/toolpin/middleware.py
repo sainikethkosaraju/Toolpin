@@ -20,6 +20,7 @@ from toolpin.audit import AuditLog
 from toolpin.budgets import Budgets
 from toolpin.canonical import args_hash, canonical_json, tool_to_dict
 from toolpin.constraints import check_arguments
+from toolpin.ifc import IFC
 from toolpin.lockfile import Lockfile
 from toolpin.oob import OutOfBandApprovals
 from toolpin.policy.decision import PolicyEngine, PolicyRequest
@@ -38,6 +39,8 @@ class GateConfig:
     principal_fn: Callable[[Any], tuple[str, tuple[str, ...]]] = lambda ctx: ("anonymous", ())
     no_mrtr: str = "deny"  # deny | out_of_band
     oob: OutOfBandApprovals | None = None
+    ifc: IFC | None = None
+    session_fn: Callable[[Any], str] = lambda ctx: "default"
 
 
 class Gate:
@@ -88,12 +91,22 @@ class Gate:
         # 4. budgets
         if (r := cfg.budgets.check(name)):
             raise self._deny(principal, name, "budgets", r, arguments)
-        # 5. approval
-        if d.kind == "require_approval":
-            res = self._approve(principal, name, arguments, d.policy_id, context)
+        # 5. information flow (session memory): may deny, or escalate an allowed call to approval
+        sid = f"{principal}:{cfg.session_fn(context)}"
+        needs_approval, policy_for_log = d.kind == "require_approval", d.policy_id
+        if cfg.ifc is not None:
+            v = cfg.ifc.check_call(sid, name, arguments)
+            if v.kind == "deny":
+                raise self._deny(principal, name, v.rule, v.reason, arguments,
+                                 f"{GENERIC_DENY}: {v.rule}")
+            if v.kind == "require_approval":
+                needs_approval, policy_for_log = True, v.rule
+        # 6. approval
+        if needs_approval:
+            res = self._approve(principal, name, arguments, policy_for_log, context)
             if res is not None:
                 return res
-        # 6. forward
+        # 7. forward
         try:
             result = await self._call(name, arguments, context)
         except Exception:
@@ -102,7 +115,10 @@ class Gate:
             raise
         if isinstance(result, t.InputRequiredResult):
             return result
-        size = sum(len(getattr(c, "text", "") or "") for c in getattr(result, "content", []) or [])
+        text = "".join(getattr(c, "text", "") or "" for c in getattr(result, "content", []) or [])
+        if cfg.ifc is not None:
+            cfg.ifc.observe_result(sid, name, text)
+        size = len(text)
         cfg.budgets.record(name, not getattr(result, "is_error", False))
         if (r := cfg.budgets.check_output(size)):
             raise self._deny(principal, name, "budgets", r, arguments, f"{GENERIC_DENY}: output too large")

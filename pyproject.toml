@@ -30,6 +30,7 @@ ignore = ["E701", "E702", "E501", "B905", "E731", "B023"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+asyncio_mode = "auto"
 
 [tool.pyright]
 include = ["src"]
